@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zoom Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #315cff 0%, #315cff 100%);
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .container {
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .zoom-button {
+        background: #ffffff;
+        color: #315cff;
+        border: none;
+        padding: 16px 32px;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        min-width: 200px;
+      }
+
+      .zoom-button:hover {
+        background: #f8f9fa;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .zoom-button:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      .zoom-logo {
+        color: #ffffff;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="zoom-logo">ZOOM</div>
+      <button id="auth-in-zoom" class="zoom-button">
+        Authenticate and install Zoom Chatbot
+      </button>
+    </div>
+
+    <script>
+      document.getElementById("auth-in-zoom").addEventListener("click", (e) => {
+        const btn = e.currentTarget;
+        btn.disabled = true;
+        btn.textContent = "Redirecting to Zoom…";
+        window.location.href = "/auth/login";
+      });
+    </script>
+  </body>
+</html>
