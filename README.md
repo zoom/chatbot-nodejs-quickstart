@@ -95,7 +95,8 @@ Before starting, make sure you have:
    ZOOM_VERIFICATION_TOKEN=your_verification_token
    PORT=4000
    ```
-
+> :warning: **Do not store credentials in plain text on production environments**
+> 
 4. **Start the local server**
 
    ```bash
