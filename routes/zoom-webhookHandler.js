@@ -1,5 +1,5 @@
 import express from 'express';
-import { validateWebhookPayload, createValidationMiddleware } from '../utils/validation.js';
+import { verifyZoomWebhookSignature, validateWebhookPayload, createValidationMiddleware } from '../utils/validation.js';
 
 import { sendChatMessage } from '../utils/zoom-api.js';
 import { callAnthropicAPI } from '../utils/anthropic.js';
@@ -13,6 +13,9 @@ const router = express.Router();
  */
 async function handleZoomWebhook(req, res) {
   try {
+    // Verify webhook signature first
+    verifyZoomWebhookSignature(req);
+
     const { event, payload } = req.body;
     
     console.log(`Received Zoom webhook event: ${event}`);
@@ -34,8 +37,8 @@ async function handleZoomWebhook(req, res) {
 
       case 'bot_notification':
         console.log('Processing bot notification from Zoom Team Chat');
-        //sendChatMessage(toJid, message );
-        await callAnthropicAPI(payload, true);
+        sendChatMessage(toJid, message );
+        // await callAnthropicAPI(payload, true);
         break;
       
       case 'interactive_message_actions'  :
@@ -68,11 +71,20 @@ async function handleZoomWebhook(req, res) {
 
   } catch (error) {
     console.error('Error handling Zoom webhook event:', error);
-    
-    res.status(500).json({ 
-      success: false, 
+
+    // Handle signature verification errors with 401
+    if (error.message.includes('signature') || error.message.includes('Missing signature headers')) {
+      return res.status(401).json({
+        success: false,
+        error: 'Unauthorized',
+        message: 'Invalid webhook signature'
+      });
+    }
+
+    res.status(500).json({
+      success: false,
       error: 'Internal Server Error',
-      message: error.message 
+      message: error.message
     });
   }
 }

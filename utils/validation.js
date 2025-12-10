@@ -2,6 +2,34 @@
  * Validation utilities for Zoom Team Chat webhook payloads and API requests
  */
 
+import crypto from 'crypto';
+
+/**
+ * Verify Zoom webhook signature to ensure authenticity
+ * @param {Object} req - Express request object
+ * @throws {Error} If signature verification fails
+ */
+export function verifyZoomWebhookSignature(req) {
+  const signature = req.headers['x-zm-signature'];
+  const timestamp = req.headers['x-zm-request-timestamp'];
+
+  if (!signature || !timestamp) {
+    throw new Error('Missing signature headers');
+  }
+
+  const message = `v0:${timestamp}:${JSON.stringify(req.body)}`;
+  const hash = crypto
+    .createHmac('sha256', process.env.ZOOM_VERIFICATION_TOKEN)
+    .update(message)
+    .digest('hex');
+
+  const expectedSignature = `v0=${hash}`;
+
+  if (signature !== expectedSignature) {
+    throw new Error('Invalid webhook signature');
+  }
+}
+
 /**
  * Validate Zoom webhook payload structure
  * @param {Object} payload - Webhook payload
@@ -16,38 +44,6 @@ export function validateWebhookPayload(payload) {
 
   if (!payload.event) {
     errors.push('Event type is required');
-  }
-
-  // Validate based on event type
-  switch (payload.event) {
-    case 'bot_notification':
-      if (!payload.payload) {
-        errors.push('Payload.payload is required for bot_notification events');
-      } else {
-        const { toJid, cmd, message } = payload.payload;
-        if (!toJid) {
-          errors.push('toJid is required in bot_notification payload');
-        }
-        if (!cmd && !message) {
-          errors.push('Either cmd or message is required in bot_notification payload');
-        }
-      }
-      break;
-
-    case 'endpoint.url_validation':
-      if (!payload.payload?.plainToken) {
-        errors.push('plainToken is required for endpoint validation');
-      }
-      break;
-
-    case 'bot_installed':
-    case 'app_deauthorized':
-      // These events don't require additional validation
-      break;
-
-    default:
-      // Allow unknown events but log them
-      console.warn(`Unknown webhook event type: ${payload.event}`);
   }
 
   return {
@@ -99,6 +95,7 @@ export function validateEnvironmentVariables() {
     'ZOOM_CLIENT_ID',
     'ZOOM_CLIENT_SECRET',
     'ZOOM_BOT_JID',
+    'ZOOM_VERIFICATION_TOKEN',
     'ANTHROPIC_API_KEY'
   ];
 
