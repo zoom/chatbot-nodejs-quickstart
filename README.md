@@ -15,42 +15,7 @@ By the end of this series, you’ll have a working chatbot that can:
 - Respond to slash commands
 - Send interactive messages, markdown, and emojis
 - Search messages using the Zoom Team Chat API
-- Schedule messages for future delivery
 - Integrate with external APIs or databases
-
----
-
-##  Tech Stack
-
-| Tool | Description |
-|------|--------------|
-| **Node.js** | Backend runtime for the chatbot logic |
-| **Express.js** | Framework for routing and handling webhooks |
-| **ngrok** | Tunneling service to expose your local dev server to Zoom |
-| **dotenv** | For managing environment variables |
-| **Axios / node-fetch** | For calling the Zoom Team Chat REST APIs |
-| **Zoom Chatbot SDK (API)** | Used to authenticate, send, and receive messages |
-| **Chatbot Studio** | Visual builder for Zoom Chatbot configurations |
-
----
-
-## 📁 Folder Structure
-
-```bash
-zoom-chatbot-series/
-├── server.js                  # Entry point for Express server
-├── routes/
-│   ├── webhookRoutes.js       # Routes for handling Zoom chatbot events
-│   ├── messageRoutes.js       # Example: endpoint to send messages
-├── utils/
-│   ├── zoomAuth.js            # OAuth 2.0 token generation
-│   ├── zoomApi.js             # Functions for interacting with Zoom APIs
-├── views/
-│   ├── index.html             # Optional landing page
-├── .env                       # Environment variables (Client ID, Secret, etc.)
-├── package.json
-└── README.md
-````
 
 ---
 
@@ -59,7 +24,7 @@ zoom-chatbot-series/
 Before starting, make sure you have:
 
 1. A [Zoom Developer Account](https://developers.zoom.us)
-2. A **Server-to-Server OAuth App** created in the [Zoom App Marketplace](https://marketplace.zoom.us/)
+2. A **General OAuth App** created in the [Zoom App Marketplace](https://marketplace.zoom.us/)
 3. Node.js (v18+ recommended)
 4. [ngrok](https://ngrok.com) (or another tunneling service)
 5. Your Zoom Chatbot credentials:
@@ -76,8 +41,8 @@ Before starting, make sure you have:
 1. **Clone this repo**
 
    ```bash
-   git clone https://github.com/yourusername/zoom-chatbot-series.git
-   cd zoom-chatbot-series
+   git clone https://github.com/zoom/chatbot-nodejs-quickstart.git
+   cd zoomworkplace-chatbot
    ```
 
 2. **Install dependencies**
@@ -93,7 +58,9 @@ Before starting, make sure you have:
    ZOOM_CLIENT_SECRET=your_client_secret
    ZOOM_BOT_JID=your_bot_jid
    ZOOM_VERIFICATION_TOKEN=your_verification_token
-   PORT=4000
+   ANTHROPIC_API_KEY=your_anthropic_api_key_here
+   FRONTEND_ORIGIN=http://localhost:3000
+   ACCOUNT_ID=your_zoom_account_id_here
    ```
 > :warning: **Do not store credentials in plain text on production environments**
 > 
@@ -126,55 +93,26 @@ Before starting, make sure you have:
 | 7       | **Search Messages via API**          | Retrieve and filter Zoom Team Chat messages using the API.                              |
 | 8       | **Scheduling Messages**              | Automate and schedule future chatbot messages.                                          |
 | 9       | **Build a Zoom Workplace App**       | Integrate your chatbot into a Zoom Workplace App for seamless collaboration.            |
+---
+### Keeping secrets secret
+
+This application makes use of your Zoom App Client ID and Client Secret as well as a custom secret for signing session
+cookies. During development, the application will read from the .env file. ;
+
+In order to align with security best practices, this application does not read from the .env file in production mode.
+
+This means you'll want to set environment variables on the hosting platform that you'
+re using instead of within the .env file. This might include using a secret manager or a CI/CD pipeline.
+
+> :warning: **Never commit your .env file to version control:** The file likely contains Zoom App Credentials and Session Secrets
 
 ---
 
-##  Example: Sending a Message
+## Need help?
 
-```js
-import fetch from "node-fetch";
+If you're looking for help, try [Developer Support](https://devsupport.zoom.us) or
+our [Developer Forum](https://devforum.zoom.us). Priority support is also available
+with [Premier Developer Support](https://zoom.us/docs/en-us/developer-support-plans.html) plans.
 
-async function sendMessage(toJid, text) {
-  const token = await getAccessToken();
-  const res = await fetch("https://api.zoom.us/v2/im/chat/messages", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      to_jid: toJid,
-      message: text,
-    }),
-  });
-  return res.json();
-}
-```
-
----
-
-##  Learning Objectives
-
-* Understand how Zoom’s Chatbot API works
-* Learn how to authenticate using OAuth 2.0
-* Implement event-driven workflows in Express
-* Enhance user interaction through markdown, emojis, and buttons
-* Build production-ready Zoom chat integrations
-
----
-
-##  Contributing
-
-Pull requests are welcome!
-If you’d like to suggest topics, improvements, or bug fixes, please open an issue or submit a PR.
-
----
-
-## 📚 Resources
-
-* [Zoom Team Chat API Documentation](https://developers.zoom.us/docs/api/team-chat/)
-* [Zoom Chatbot Documentation](https://developers.zoom.us/docs/team-chat/)
-* [Zoom App Marketplace](https://marketplace.zoom.us/)
-* [Zoom Developer Community Forum](https://devforum.zoom.us/)
-
-
+### Documentation
+Make sure to review [our documentation](https://marketplace.zoom.us/docs/zoom-apps/introduction/) as a reference when building your Zoom Apps.
