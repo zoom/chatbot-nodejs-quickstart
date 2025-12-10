@@ -132,6 +132,20 @@ app.use((error, _req, res, _next) => {
   });
 });
 
+// Public, non-sensitive client config
+app.get('/config.js', (_req, res) => {
+  res.type('application/javascript');
+  res.set('Cache-Control', 'no-store'); // avoid stale env leakage in dev
+
+  const config = {
+    // JID is effectively public; do NOT put secrets here.
+    ZOOM_CHATBOT_JID: process.env.ZOOM_CHATBOT_JID || '',
+  };
+
+  // Only serialize the whitelisted keys
+  res.send(`window.APP_CONFIG = ${JSON.stringify(config)};`);
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({

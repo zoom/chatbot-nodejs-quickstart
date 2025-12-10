@@ -69,16 +69,30 @@
       </button>
     </div>
 
-    <script>
-      const chatbotJid = "robot_v1nhrah1hrqhuexexb5nn5-a@xmpp.zoom.us"; // replace with your bot JID
+    <!-- Load server-injected, non-secret config -->
+    <script src="/config.js"></script>
 
-      document.getElementById("zoom-button").addEventListener("click", () => {
-        const link = `https://zoom.us/launch/chat?jid=${encodeURIComponent(
-          chatbotJid
-        )}`;
-        // open link in a new tab/window
-        window.open(link, "_blank", "noopener,noreferrer");
-      });
+    <script>
+      const chatbotJid = window.APP_CONFIG?.ZOOM_CHATBOT_JID;
+
+      if (!chatbotJid) {
+        console.warn("ZOOM_CHATBOT_JID is not configured");
+      }
+
+      document
+        .getElementById("zoom-button")
+        .addEventListener("click", () => {
+          if (!chatbotJid) {
+            alert("Chatbot is not configured. Please contact your admin.");
+            return;
+          }
+
+          const link = `https://zoom.us/launch/chat?jid=${encodeURIComponent(
+            chatbotJid
+          )}`;
+
+          window.open(link, "_blank", "noopener,noreferrer");
+        });
     </script>
   </body>
 </html>
