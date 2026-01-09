@@ -1,22 +1,69 @@
-# Create a Zoom Workplace Team Chat Chatbot app with the App Manifest API
+# Create a Zoom Team Chat Chatbot app with the App Manifest API
 
 This guide shows how to create a Zoom Team Chatbot app using the **App Manifest API**.
 
-* First, add the following marketplace scopes:
+### Set local developer env with Ngrok 
+
+For local development, this sample uses reverse proxy to tunnel traffic to this application via https.
+
+```
+ngrok http 4000
+```
+
+Ngrok will output the origin it has created for your tunnel, eg https://9a20-38-99-100-7.ngrok.io. You'll need to use the https origin from the Ngrok terminal output or what tunnel service of your when testing locally. In the pre-defined configuration, replace all instances of `example.ngrok.app` with your actual ngrok domain.
+
+
+Please copy the https origin from the Ngrok terminal output and paste it in the ZOOM_REDIRECT_URI value in the .env file
+
+---
+### Create and configure Marketplace App
+
+### 1. Create an OAuth app
+
+👉 **[Click here to create an app on the Zoom App Marketplace](https://marketplace.zoom.us/develop/create)**
+
+* Select **General app** and click **Create**.
+
+> [!NOTE]
+> Take note of your app ID in the URL after app creation -- you will need it to later on.
+---
+
+### 2. Retrieve app credentials
+
+* Click **Manage** > your app
+* Navigate to **Basic Information** > **App Credentials**
+
+> [!Note]
+> Use these credentials for [authorization](https://developers.zoom.us/docs/integrations/oauth/).
+
+---
+
+### 3. Add required scopes
+
+ On the Scope page, select the following:
   * Create apps: marketplace:write:app
   * View an app: marketplace:read:app
 
-* Use the [Update an app by manifest](https://developers.zoom.us/docs/api/marketplace/#tag/manifest/put/marketplace/apps/{appId}/manifest) endpoint to quickly configure a Zoom Marketplace app.
-  
-* Replace `example.ngrok.app` with your actual ngrok domain when testing locally.
+### 4. Update the app using the Manifest API
 
-### Endpoint
+Use the following endpoint to quickly configure a Zoom Marketplace app:
 
-```http
+**Example request:**
+
+```
 PUT /marketplace/apps/{appId}/manifest
 ```
+👉 [Update an app by manifest API endpoint](https://developers.zoom.us/docs/api/marketplace/#tag/manifest/put/marketplace/apps/{appId}/manifest)
 
-### Sample request payload
+---
+
+### 5. Use Manifest JSON object to create Zoom App
+ Use an API tool like Postman to send a PUT request to the manifest endpoint with the JSON object below as the request body.
+
+> [!NOTE]
+> Replace placeholder URLs like `https://example.ngrok.io` with your actual tunnel URL (e.g., from ngrok).
+
+**Request body:**
 
 ```json
 {
