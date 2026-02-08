@@ -69,30 +69,9 @@
       </button>
     </div>
 
-    <!-- Load server-injected, non-secret config -->
-    <script src="/config.js"></script>
 
     <script>
-      const chatbotJid = window.APP_CONFIG?.ZOOM_CHATBOT_JID;
-
-      if (!chatbotJid) {
-        console.warn("ZOOM_CHATBOT_JID is not configured");
-      }
-
-      document
-        .getElementById("zoom-button")
-        .addEventListener("click", () => {
-          if (!chatbotJid) {
-            alert("Chatbot is not configured. Please contact your admin.");
-            return;
-          }
-
-          const link = `https://zoom.us/launch/chat?jid=${encodeURIComponent(
-            chatbotJid
-          )}`;
-
-          window.open(link, "_blank", "noopener,noreferrer");
-        });
+    //  Add deep linking to the chatbot here!
     </script>
   </body>
 </html>

@@ -5,9 +5,6 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 
 import oauthRoutes from './routes/oauth-routes.js';
-import webhookRoutes from './routes/zoom-webhookHandler.js';
-import messageRoutes from './routes/message-routes.js';
-import signRoutes from './routes/signature-routes.js';
 
 import { validateEnvironmentVariables } from './utils/validation.js';
 
@@ -77,10 +74,7 @@ app.use(session({
 app.use(express.static('views'));
 
 // Routes
-app.use('/api', messageRoutes);
-app.use('/webhooks', webhookRoutes);
 app.use('/auth', oauthRoutes);
-app.use('/apps', signRoutes);
 
 // Health check endpoint
 app.get('/health', (_req, res) => {
@@ -130,20 +124,6 @@ app.use((error, _req, res, _next) => {
     error: 'Internal Server Error',
     message: process.env.NODE_ENV === 'production' ? 'Something went wrong' : error.message
   });
-});
-
-// Public, non-sensitive client config
-app.get('/config.js', (_req, res) => {
-  res.type('application/javascript');
-  res.set('Cache-Control', 'no-store'); // avoid stale env leakage in dev
-
-  const config = {
-    // JID is effectively public; do NOT put secrets here.
-    ZOOM_CHATBOT_JID: process.env.ZOOM_CHATBOT_JID || '',
-  };
-
-  // Only serialize the whitelisted keys
-  res.send(`window.APP_CONFIG = ${JSON.stringify(config)};`);
 });
 
 // 404 handler
