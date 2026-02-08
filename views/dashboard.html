@@ -69,9 +69,27 @@
       </button>
     </div>
 
-
     <script>
-    //  Add deep linking to the chatbot here!
+      const chatbotJid = "ADD YOUR CHATBOT JID HERE"; // Replace with your chatbot's JID
+
+      if (!chatbotJid) {
+        console.warn("ZOOM_CHATBOT_JID is not configured");
+      }
+
+      document
+        .getElementById("zoom-button")
+        .addEventListener("click", () => {
+          if (!chatbotJid) {
+            alert("Chatbot is not configured. Please contact your admin.");
+            return;
+          }
+
+          const link = `https://zoom.us/launch/chat?jid=${encodeURIComponent(
+            chatbotJid
+          )}`;
+
+          window.open(link, "_blank", "noopener,noreferrer");
+        });
     </script>
   </body>
 </html>
