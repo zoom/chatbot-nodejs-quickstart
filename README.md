@@ -91,8 +91,8 @@ Before starting, make sure you have:
 | 4       | **Markdown & Emojis**                | Format messages beautifully using markdown and emojis.                                  |
 | 5       | **Reactions & Interactive Messages** | Capture and respond to reactions and interactive message components.                    |
 | 6       | **Threaded Replies**                 | Learn how to reply to specific messages within a thread using the `reply_to` parameter. |
-| 7       | **Search Messages via API**          | Retrieve and filter Zoom Team Chat messages using the API.                              |
-| 8       | **Scheduling Messages**              | Automate and schedule future chatbot messages.                                          |
+| 7       | **App Shortcut and Team Chat App Modal**               | Enable App shortcut and create Team Chat App Modal.                               |
+| 8       | **Search Messages via API**          | Retrieve and filter Zoom Team Chat messages using the API.                                           |
 | 9       | **Build a Zoom Workplace App**       | Integrate your chatbot into a Zoom Workplace App for seamless collaboration.            |
 ---
 ### Keeping secrets secret
