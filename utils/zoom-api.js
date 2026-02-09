@@ -96,22 +96,7 @@ export async function sendChatMessage(toJid,  message, replyTo = null ) {
            {
             "type": "message",
             "text": message
-           },
-           {
-        "type": "actions",
-        "items": [
-          {
-            "text": "Thumbsup",
-            "value": "thumbsup",
-            "style": "Thumbsup"
-          },
-          {
-            "text": "Thumbsdown",
-            "value": "thumbsdown",
-            "style": "Thumbsdown"
-          }
-        ]
-      }
+           }
           ]
          },
       robot_jid: process.env.ZOOM_BOT_JID || "",
