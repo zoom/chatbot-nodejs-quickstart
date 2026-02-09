@@ -2,7 +2,7 @@ import express from 'express';
 import { validateWebhookPayload, createValidationMiddleware } from '../utils/validation.js';
 
 import { sendChatMessage } from '../utils/zoom-api.js';
-// import { callAnthropicAPI } from '../utils/anthropic.js';
+import { callAnthropicAPI } from '../utils/anthropic.js';
 
 const router = express.Router();
 
@@ -34,8 +34,8 @@ async function handleZoomWebhook(req, res) {
 
       case 'bot_notification':
         console.log('Processing bot notification from Zoom Team Chat');
-        sendChatMessage(toJid, message );
-        //await callAnthropicAPI(payload, true);
+        // sendChatMessage(toJid, message );
+        await callAnthropicAPI(payload, true);
         break;
       
       case 'interactive_message_actions'  :
