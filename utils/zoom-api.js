@@ -80,71 +80,9 @@ export async function exchangeCodeForAccessToken({
  * @param {string} [replyTo] - Optional message ID to reply to
  * @returns {Promise<Object>} API response
  */
-export async function sendChatMessage(toJid,  message, replyTo = null ) {
-  try {
-    
-    const accessToken = await getChatbotToken();
-    
-    const body = {
-      account_id: process.env.ACCOUNT_ID || "",
-      "content": {
-          "head": {
-           "text": "Hello World",
-           "style": { "bold": true }
-          },
-          "body": [
-           {
-            "type": "message",
-            "text": message
-           },
-           {
-        "type": "actions",
-        "items": [
-          {
-            "text": "Thumbsup",
-            "value": "thumbsup",
-            "style": "Thumbsup"
-          },
-          {
-            "text": "Thumbsdown",
-            "value": "thumbsdown",
-            "style": "Thumbsdown"
-          }
-        ]
-      }
-          ]
-         },
-      robot_jid: process.env.ZOOM_BOT_JID || "",
-      to_jid: toJid,
-      user_jid: toJid,
-    };
+// Add Function to send messages to Zoom Team Chat here (e.g., sendChatMessage)
 
-    console.log('Preparing to send message to Zoom Team Chat:', body);
 
-    if (replyTo) {
-      body.reply_to = replyTo;
-    }
-
-    const response = await fetch(`${ZOOM_API_BASE_URL}/im/chat/messages`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(`Failed to send message: ${error.message || response.statusText}`);
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error('Error sending chat message:', error);
-    throw error;
-  }
-}
 
 /**
  * Get chat messages
